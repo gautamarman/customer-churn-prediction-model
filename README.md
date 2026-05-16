@@ -101,17 +101,6 @@ Evaluated model performance using:
 
 ---
 
-# Project Structure
-
-customer-churn-prediction/
-│
-├── data/
-├── scripts/
-├── images/
-├── README.md
-
----
-
 # How to Run the Project
 
 1. Clone the repository
