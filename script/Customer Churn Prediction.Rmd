@@ -1,0 +1,121 @@
+```{r}
+install.packages("rlang")
+```
+
+```{r}
+#loading libraries
+
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("caret")
+install.packages("randomForest")
+
+library(dplyr)
+library(ggplot2)
+library(caret)
+library(randomForest)
+```
+
+```{r}
+#loading dataset
+
+
+df <- read.csv("C:/Users/gauta/Downloads/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+
+head(df)
+```
+```{r}
+#cleaning data
+
+str(df)
+
+colSums(is.na(df))
+```
+
+```{r}
+#converting target variable
+
+df$Churn <- as.factor(df$Churn)
+```
+
+```{r}
+#churn distribution
+
+ggplot(df, aes(x=Churn, fill=Churn)) +
+  geom_bar()
+```
+
+```{r}
+#monthly charges v/s churn
+
+ggplot(df, aes(x=Churn, y=MonthlyCharges, fill=Churn)) +
+  geom_boxplot()
+```
+
+```{r}
+#contract type analysis
+
+ggplot(df, aes(x=Contract, fill=Churn)) +
+  geom_bar(position="fill")
+```
+
+```{r}
+#remove unnecessary columns
+
+df$customerID <- NULL
+```
+
+```{r}
+#splitting train/test data
+
+set.seed(123)
+
+trainIndex <- createDataPartition(df$Churn, p=0.8, list=FALSE)
+
+trainData <- df[trainIndex, ]
+testData <- df[-trainIndex, ]
+```
+
+```{r}
+#training ml model/logistic regression
+
+model <- glm(
+  Churn ~ .,
+  data=trainData,
+  family="binomial"
+)
+```
+
+```{r}
+#making predictions and evaluating
+
+rm(predictions)
+
+predictions <- ifelse(
+  pred_probs > 0.5,
+  "Yes",
+  "No"
+)
+
+predictions <- factor(
+  predictions,
+  levels = c("No", "Yes")
+)
+
+confusionMatrix(
+  predictions,
+  testData$Churn
+)
+```
+
+```{r}
+## Business Insights
+
+#- Customers with month-to-month contracts demonstrated higher churn tendencies compared to customers on annual plans.
+
+#- Higher monthly charges appeared to increase churn probability, suggesting pricing sensitivity among customers.
+
+#- Customers with longer tenure were more likely to remain loyal, highlighting the importance of early-stage customer retention.
+
+#- The analysis suggests that retention strategies should focus on new customers and customers with flexible contract plans.
+```
