@@ -84,6 +84,7 @@ Evaluated model performance using:
 
 # Visualizations Included
 - Churn Distribution Chart
+!(images/churn_distribution.png)
 - Contract Type Analysis
 - Monthly Charges vs Churn
 - Customer Retention Trends
